@@ -4,17 +4,142 @@
 <meta charset="utf-8" />
 <title>DoH-nslookup</title>
 <style>
+:root {
+	--github-logo: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpFNTE3OEEyQTk5QTAxMUUyOUExNUJDMTA0NkE4OTA0RCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpFNTE3OEEyQjk5QTAxMUUyOUExNUJDMTA0NkE4OTA0RCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkU1MTc4QTI4OTlBMDExRTI5QTE1QkMxMDQ2QTg5MDREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkU1MTc4QTI5OTlBMDExRTI5QTE1QkMxMDQ2QTg5MDREIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+m4QGuQAAAyRJREFUeNrEl21ojWEYx895TDPbMNlBK46IUiNmPvHBSUjaqc0H8pF5+aDUKPEBqU2NhRQpX5Rv5jWlDIWlMCv7MMSWsWwmb3tpXub4XXWdPHvc9/Gc41nu+nedc7/8r/99PffLdYdDPsvkwsgkTBwsA/PADJCnzX2gHTwBt8Hl7p537/3whn04XoDZDcpBlk+9P8AFcAghzRkJwPF4zGGw0Y9QS0mAM2AnQj77FqCzrtcwB1Hk81SYojHK4DyGuQ6mhIIrBWB9Xm7ug/6B/nZrBHBegrkFxoVGpnwBMSLR9EcEcC4qb8pP14BWcBcUgewMnF3T34VqhWMFkThLJAalwnENOAKiHpJq1FZgI2AT6HZtuxZwR9GidSHtI30jOrbawxlVX78/AbNfhHlomEUJJI89O2MqeE79T8/nk8nMBm/dK576hZgmA3cp/R4l9/UeSxiHLVIlNm4nFfT0bxyuIj7LHRTKai+zdJobwMKzcZSJb0ePV5PKN+BqAAKE47UlMnERELMM3EdYP/yrd+XYb2mOiYBiQ8OQnoRBlXrl9JZix7D1pHTazu4MoyBcnYamqAjIMTR8G4FT8LuhLsexXYYjICBiqhQBvYb6fLZIJCjPypVvaOoVAW2WcasCnL2Nq82xHJNSqlCeFcDshaPK0twkAhosjZL31QYw+1rlMpWGMArl23SBsZZO58F2tlJXmjOXS+s4WGvpMiBJT/I2PInZ6lIs9/hBsNS1hS6BG0DSqmYEDRlCXQrmy50P1oDRKTSegmNbUsA0zDMwRhPJXeCE3vWLPQMvan6X8AgIa1vcR4AkGZkDR4ejJ1UHpsaVI0g2LInpOsNFUud1rhxSV+fzC9Woz2EZkWQuja7/B+jUrgtIMpy9YCW4n4K41YfzRneW5E1KJTe4B2Zq1Q5EHEtj4U3AfEzR5SVY4l7QYQPJdN2as7RKBF0BPZqqH4VgMAMBL8Byxr7y8zCZiDlnOcEKIPmUpgB5Z2ww5RdOiiRiNajUmWda5IG6WbhsyY2fx6m8gLcoJDJFkH219M3We1+cnda93pfycZpIJEL/s/wSYADmOAwAQgdpBAAAAABJRU5ErkJggg==");
+
+	--dns-status-0: ""
+}
+
 #wip { text-align: center; font-size: 25vh; }
 
-#footer { font-size: smaller; }
-#footer > h3 { text-align: center; }
+#corner { position: fixed; right: 16px; top: 16px; margin: auto; width: auto; }
+#corner > h2 { margin: 0px; padding: 0px; }
 
-#copy { margin-top: 2em; }
+@media only screen {
+	body > div { width: 100%; margin: auto 0px; }
+
+@media only screen and (min-width: 800px) {
+	body > div { width: 70vw; margin: auto 15vw; }
+}
+
+button { padding: 0.5em 20%; }
+
+#question { display: flex; flex-wrap: wrap; }
+
+#question::before {
+	content: "Question:";
+	font-size: 24px;
+	font-weight: bold;
+	margin: 20px 0px;
+	flex: 100%;
+}
+
+#question > input, #question > button { text-align: center; font-size: x-large; margin: 2px 0px; }
+#question > #q { flex: 40; }
+#question > #t { flex: 10; }
+#question > #at, #question > #send { flex: 100%; }
+
+#answers:not(:empty)::before {
+	content: "Answers:";
+	font-size: 24px;
+	font-weight: bold;
+	margin: 20px 0px;
+	display: block;
+}
+
+div.answer-head, div.answer-row { display: flex; flex-wrap: nowrap; }
+div.answer-head > span { display: flex; flex: 1; padding: 2px 8px; }
+div.answer-head > span.status { flex: 10; }
+div.answer-head > span.status[data-value]:before { content: "⚠️ (" attr(data-value) ") " var(--status-text, "Unclassified status"); }
+div.answer-head > span.status[data-value="0"]:before { content: "✔️ (" attr(data-value) ") " var(--status-text, "OK"); }
+div.answer-head > span[data-property][data-bool]:before { content: attr(data-property); }
+div.answer-head > span[data-property][data-bool=""], div.answer-head > span[data-property][data-bool="0"] { opacity: 0.1; }
+
+div.answer-head > span.status[data-value] { --status-text: "Unclassified status"; }
+div.answer-head > span.status[data-value="0"] { --status-text: "No Error"; }
+div.answer-head > span.status[data-value="1"] { --status-text: "️Format Error"; }
+div.answer-head > span.status[data-value="2"] { --status-text: "Server Failure"; }
+div.answer-head > span.status[data-value="3"] { --status-text: "Non-Existent (NX) Domain"; }
+div.answer-head > span.status[data-value="4"] { --status-text: "Not Implemented"; }
+div.answer-head > span.status[data-value="5"] { --status-text: "Query Refused"; }
+div.answer-head > span.status[data-value="6"] { --status-text: "Name Exists (YXDomain), but should not to be..."; }
+div.answer-head > span.status[data-value="7"] { --status-text: "RR Set Exists (YXRRSet), but should not to be..."; }
+div.answer-head > span.status[data-value="8"] { --status-text: "RR Set Not exists but should be (NXRRSet)"; }
+div.answer-head > span.status[data-value="9"] { --status-text: "Not (Authorized / Authoritive)?"; }
+div.answer-head > span.status[data-value="10"] { --status-text: "Name not contained in zone"; }
+div.answer-head > span.status[data-value="11"] { --status-text: "DSO-TYPE Not Implemented"; }
+div.answer-head > span.status[data-value="16"] { --status-text: "Bad OPT Version / TSIG Signature Failure"; }
+div.answer-head > span.status[data-value="17"] { --status-text: "Key not recognized"; }
+div.answer-head > span.status[data-value="18"] { --status-text: "Signature out of time window"; }
+div.answer-head > span.status[data-value="19"] { --status-text: "Bad TKEY Mode"; }
+div.answer-head > span.status[data-value="20"] { --status-text: "Duplicate key name"; }
+div.answer-head > span.status[data-value="21"] { --status-text: "Algorithm not supported"; }
+div.answer-head > span.status[data-value="22"] { --status-text: "Bad Truncation"; }
+div.answer-head > span.status[data-value="23"] { --status-text: "Bad/missing Server Cookie"; }
+
+div.answer-row:before { content: "[ " var(--rrtype-text, "(RR Type" attr(data-type) ")") " ] " attr(data-host) ": "; padding-right: 8px; }
+div.answer-row[data-ttl]:after { content: " (TTL: " attr(data-ttl) ")"; padding-left: 12px; }
+div.answer-row[data-type="1"] { --rrtype-text: "A"; }
+div.answer-row[data-type="2"] { --rrtype-text: "NS"; }
+div.answer-row[data-type="3"] { --rrtype-text: "MD"; }
+div.answer-row[data-type="4"] { --rrtype-text: "MF"; }
+div.answer-row[data-type="5"] { --rrtype-text: "CNAME"; }
+div.answer-row[data-type="6"] { --rrtype-text: "SOA"; }
+div.answer-row[data-type="10"] { --rrtype-text: "NULL"; }
+div.answer-row[data-type="12"] { --rrtype-text: "PTR"; }
+div.answer-row[data-type="13"] { --rrtype-text: "HINFO"; }
+div.answer-row[data-type="14"] { --rrtype-text: "MINFO"; }
+div.answer-row[data-type="15"] { --rrtype-text: "MX"; }
+div.answer-row[data-type="16"] { --rrtype-text: "TXT"; }
+div.answer-row[data-type="24"] { --rrtype-text: "SIG"; }
+div.answer-row[data-type="25"] { --rrtype-text: "KEY"; }
+div.answer-row[data-type="28"] { --rrtype-text: "AAAA"; }
+div.answer-row[data-type="29"] { --rrtype-text: "LOC"; }
+div.answer-row[data-type="33"] { --rrtype-text: "SRV"; }
+div.answer-row[data-type="36"] { --rrtype-text: "KX"; }
+div.answer-row[data-type="37"] { --rrtype-text: "CERT"; }
+div.answer-row[data-type="39"] { --rrtype-text: "DNAME"; }
+div.answer-row[data-type="44"] { --rrtype-text: "SSHFP"; }
+div.answer-row[data-type="46"] { --rrtype-text: "RRSIG"; }
+div.answer-row[data-type="47"] { --rrtype-text: "NSEC"; }
+div.answer-row[data-type="48"] { --rrtype-text: "DNSKEY"; }
+div.answer-row[data-type="49"] { --rrtype-text: "DHCID"; }
+div.answer-row[data-type="56"] { --rrtype-text: "NINFO"; }
+div.answer-row[data-type="59"] { --rrtype-text: "CDS"; }
+div.answer-row[data-type="60"] { --rrtype-text: "CDNSKEY"; }
+div.answer-row[data-type="61"] { --rrtype-text: "OPENPGPKEY"; }
+div.answer-row[data-type="64"] { --rrtype-text: "SVCB"; }
+div.answer-row[data-type="65"] { --rrtype-text: "HTTPS"; }
+div.answer-row[data-type="99"] { --rrtype-text: "SPF"; }
+div.answer-row[data-type="251"] { --rrtype-text: "IXFR"; }
+div.answer-row[data-type="252"] { --rrtype-text: "AXFR"; }
+div.answer-row[data-type="256"] { --rrtype-text: "URI"; }
+div.answer-row[data-type="257"] { --rrtype-text: "CAA"; }
+div.answer-row[data-type="32768"] { --rrtype-text: "TA"; }
+div.answer-row[data-type="32769"] { --rrtype-text: "DLV"; }
+
+.error {
+	background: rgba(240, 0, 0, 0.1);
+	border: 1px solid rgba(240, 0, 0, 0.6);
+	padding: 8px;
+}
+
+.error:before {
+	content: "❗ Error:";
+	color: rgb(160, 0, 0);
+	padding-right: 8px;
+}
+
+
+#footer { font-size: smaller; }
+
+#copy > a { font-weight: bold; }
+
 a[href*="//github.com/"]:before {
-	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpFNTE3OEEyQTk5QTAxMUUyOUExNUJDMTA0NkE4OTA0RCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpFNTE3OEEyQjk5QTAxMUUyOUExNUJDMTA0NkE4OTA0RCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkU1MTc4QTI4OTlBMDExRTI5QTE1QkMxMDQ2QTg5MDREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkU1MTc4QTI5OTlBMDExRTI5QTE1QkMxMDQ2QTg5MDREIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+m4QGuQAAAyRJREFUeNrEl21ojWEYx895TDPbMNlBK46IUiNmPvHBSUjaqc0H8pF5+aDUKPEBqU2NhRQpX5Rv5jWlDIWlMCv7MMSWsWwmb3tpXub4XXWdPHvc9/Gc41nu+nedc7/8r/99PffLdYdDPsvkwsgkTBwsA/PADJCnzX2gHTwBt8Hl7p537/3whn04XoDZDcpBlk+9P8AFcAghzRkJwPF4zGGw0Y9QS0mAM2AnQj77FqCzrtcwB1Hk81SYojHK4DyGuQ6mhIIrBWB9Xm7ug/6B/nZrBHBegrkFxoVGpnwBMSLR9EcEcC4qb8pP14BWcBcUgewMnF3T34VqhWMFkThLJAalwnENOAKiHpJq1FZgI2AT6HZtuxZwR9GidSHtI30jOrbawxlVX78/AbNfhHlomEUJJI89O2MqeE79T8/nk8nMBm/dK576hZgmA3cp/R4l9/UeSxiHLVIlNm4nFfT0bxyuIj7LHRTKai+zdJobwMKzcZSJb0ePV5PKN+BqAAKE47UlMnERELMM3EdYP/yrd+XYb2mOiYBiQ8OQnoRBlXrl9JZix7D1pHTazu4MoyBcnYamqAjIMTR8G4FT8LuhLsexXYYjICBiqhQBvYb6fLZIJCjPypVvaOoVAW2WcasCnL2Nq82xHJNSqlCeFcDshaPK0twkAhosjZL31QYw+1rlMpWGMArl23SBsZZO58F2tlJXmjOXS+s4WGvpMiBJT/I2PInZ6lIs9/hBsNS1hS6BG0DSqmYEDRlCXQrmy50P1oDRKTSegmNbUsA0zDMwRhPJXeCE3vWLPQMvan6X8AgIa1vcR4AkGZkDR4ejJ1UHpsaVI0g2LInpOsNFUud1rhxSV+fzC9Woz2EZkWQuja7/B+jUrgtIMpy9YCW4n4K41YfzRneW5E1KJTe4B2Zq1Q5EHEtj4U3AfEzR5SVY4l7QYQPJdN2as7RKBF0BPZqqH4VgMAMBL8Byxr7y8zCZiDlnOcEKIPmUpgB5Z2ww5RdOiiRiNajUmWda5IG6WbhsyY2fx6m8gLcoJDJFkH219M3We1+cnda93pfycZpIJEL/s/wSYADmOAwAQgdpBAAAAABJRU5ErkJggg==");
+	background-image: var(--github-logo);
 	background-repeat: no-repeat;
 	background-size: 1em 1em;
-	padding-left: 1.05em;
+	padding-left: calc(1em + 2px);
 	content: "";
 	opacity: 0.44;
 }
@@ -22,12 +147,60 @@ a[href*="//github.com/"]:hover::before { opacity: 1; }
 </style>
 </head>
 <body>
-<div id="wip">🏗️</div>
+<div id="corner"><h2><a href="https://github.com/rickylko/DoH-nslookup" target="_blank" title="GitHub: @rickylko/DoH-nslookup"></a></h2></div>
+<div id="question"><input type="text" id="q" value="" placeholder="What host you are looking for? e.g. cloudflare.com?" title="Host in question e.g. cloudflare.com" /><input type="text" id="t" value="A" placeholder="Query Type (A, AAAA, NS...)" title="Query Type e.g. A, AAAA, or its raw numeric values per IANA specification" /><input type="text" id="at" value="https://cloudflare-dns.com/dns-query" placeholder="What DoH server to ask?" title="Full URL of the DoH endpoint, starts with &quot;https://&quot; up to &quot;?&quot; where query parameters begin" /><button id="send" >🔎 Query</button></div>
+<template id="answer"><div class="answer-head"><span class="status" title="Response Code"></span><span data-property="TC" title="Truncated"></span><span data-property="RD" title="Recursive Desired"></span><span data-property="RA" title="Recursion Available"></span></span><span data-property="AD" title="All records verified with DNSSEC"></span><span data-property="CD" title="DNSSEC validation disable"></span></div></template>
+<template id="record"><div class="answer-row"></div></template>
+<template id="error"><div class="error"></div></template>
+<div id="answers"></div>
 <div id="footer"><hr/>
-<h3>DoH-nslookup</h3>
-Do nslookup over web page, utilizing DoH (DNS-over-HTTPS)
-
-<div id="copy">&copy; 2021 Ricky Lau (<a href="https://github.com/rickylko" target="_blank" title="GitHub: @rickylko">@rickylko</a>), licensed under conditions per <span title="Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:&#10;&#10;The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.&#10;&#10;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.">MIT License</span></div>
+<div id="copy"><a href="https://github.com/rickylko/DoH-nslookup" target="_blank" title="GitHub: @rickylko/DoH-nslookup">DoH-nslookup</a> &copy; 2021 Ricky Lau (<a href="https://github.com/rickylko" target="_blank" title="GitHub: @rickylko">@rickylko</a>), licensed under conditions per <span title="Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:&#10;&#10;The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.&#10;&#10;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.">MIT License</span></div>
 </div>
 </body>
+<script>(() => {
+var $ = (id) => document.getElementById (id), $v = (id) => $ (id).value, t = {
+	err: $ ('error').content,
+	ans: $ ('answer').content,
+	ansRR: $ ('record').content
+}, e = {
+	ans: $ ('answers')
+};
+
+$ ('send').addEventListener ('click', () => {
+	var dohUrl = new URL ($v ('at'));
+
+	dohUrl.searchParams.set ('name', $v ('q'));
+	dohUrl.searchParams.set ('type', $v ('t'));
+
+	e.ans.innerHTML = '';
+
+	fetch (dohUrl, { headers: { 'Accept': 'application/dns-json' }, mode: 'cors' }).then (r => {
+		if (r.ok) { r.json ().then (d => {
+			var ansEl = t.ans.cloneNode (true);
+			ansEl.querySelector ('.status').setAttribute ('data-value', d.Status);
+			['TC', 'RD', 'RA', 'AD', 'CD'].forEach (p => ansEl.querySelector ('[data-property=' + p + ']').setAttribute ('data-bool', !!d [p] ? '1' : ''));
+			e.ans.appendChild (ansEl);
+			d.Answer.forEach (rr => {
+				var rowEl = t.ansRR.cloneNode (true), rrEl = rowEl.querySelector ('div.answer-row');
+				rrEl.setAttribute ('data-type', rr.type);
+				rrEl.setAttribute ('data-host', rr.name);
+				rrEl.setAttribute ('data-data', rr.data);
+				rrEl.setAttribute ('data-ttl', rr.TTL);
+				rrEl.innerHTML = rr.data;
+				e.ans.appendChild (rowEl);
+			});
+		}); } else {
+			throw new Error (['HTTP', r.status, r.statusText].join (' '))
+		}
+	}).catch (err => {
+		var errEl = t.err.cloneNode (true);
+		console.error ('fetch error', err);
+		errEl.querySelector ('div.error').innerHTML = err.message;
+		e.ans.appendChild (errEl);
+	});
+});
+
+
+}) ();
+</script>
 </html>
