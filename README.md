@@ -1,2 +1,2 @@
 # DoH-nslookup
-Do nslookup over web page, utilizing DoH (DNS-over-HTTPS)
+Make DNS query in web page, like nslookup, by JavaScript-fetching DoH (DNS-over-HTTPS).
