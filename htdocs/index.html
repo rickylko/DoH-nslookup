@@ -76,7 +76,7 @@ $ ('send').addEventListener ('click', () => {
 	dohUrl.searchParams.set ('name', $v ('q'));
 	dohUrl.searchParams.set ('type', $v ('t'));
 
-	fetch (dohUrl, { headers: { 'Accept': 'application/dns-json' } }).then (r => {
+	fetch (dohUrl, { headers: { 'Accept': 'application/dns-json' }, mode: 'cors' }).then (r => {
 		r.ok ? console.error ('fetch error', r) : r.json ().then (d => $ ('answers').innerHTML = JSON.stringify (d, null, '\t'));
 	});
 });
